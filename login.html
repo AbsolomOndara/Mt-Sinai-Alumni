@@ -1,699 +1,439 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welfare Member Portal - Firebase Auth</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --primary-dark: #0a192f;
-            --primary: #112240;
-            --primary-light: #233554;
-            --accent: #64ffda;
-            --text-primary: #e6f1ff;
-            --text-secondary: #8892b0;
-            --success: #64ffda;
-            --error: #ff6b6b;
-            --card-bg: #172a45;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
-            color: var(--text-primary);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        
-        .container {
-            width: 100%;
-            max-width: 450px;
-            margin: 0 auto;
-        }
-        
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        .logo {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            color: var(--accent);
-        }
-        
-        .tagline {
-            color: var(--text-secondary);
-            font-size: 1.2rem;
-            margin-bottom: 30px;
-        }
-        
-        .card {
-            background-color: var(--card-bg);
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            padding: 30px;
-            margin-bottom: 30px;
-            transition: transform 0.3s ease;
-        }
-        
-        .card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .card-title {
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-            color: var(--accent);
-            border-bottom: 2px solid var(--primary-light);
-            padding-bottom: 10px;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--text-secondary);
-            font-weight: 500;
-        }
-        
-        input[type="text"],
-        input[type="email"],
-        input[type="password"],
-        input[type="tel"] {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid var(--primary-light);
-            border-radius: 5px;
-            background-color: var(--primary);
-            color: var(--text-primary);
-            font-size: 16px;
-            transition: all 0.3s;
-        }
-        
-        input:focus {
-            border-color: var(--accent);
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(100, 255, 218, 0.2);
-        }
-        
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            margin: 20px 0;
-        }
-        
-        .checkbox-group input {
-            margin-right: 10px;
-        }
-        
-        .btn {
-            background-color: var(--accent);
-            color: var(--primary-dark);
-            border: none;
-            padding: 12px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            width: 100%;
-            transition: all 0.3s;
-        }
-        
-        .btn:hover {
-            background-color: #4ecdb4;
-            transform: translateY(-2px);
-        }
-        
-        .btn-outline {
-            background-color: transparent;
-            border: 2px solid var(--accent);
-            color: var(--accent);
-        }
-        
-        .btn-outline:hover {
-            background-color: rgba(100, 255, 218, 0.1);
-        }
-        
-        .tabs {
-            display: flex;
-            margin-bottom: 30px;
-            background-color: var(--primary-light);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        
-        .tab {
-            flex: 1;
-            text-align: center;
-            padding: 15px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .tab.active {
-            background-color: var(--accent);
-            color: var(--primary-dark);
-            font-weight: 600;
-        }
-        
-        .tab-content {
-            display: none;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        .footer {
-            text-align: center;
-            margin-top: 40px;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-        
-        .error {
-            color: var(--error);
-            font-size: 0.9rem;
-            margin-top: 5px;
-        }
-        
-        .success {
-            color: var(--success);
-            font-size: 0.9rem;
-            margin-top: 5px;
-        }
-        
-        .firebase-info {
-            background-color: var(--primary-light);
-            border-left: 4px solid var(--accent);
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 4px;
-        }
-        
-        .firebase-info h3 {
-            color: var(--accent);
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-        }
-        
-        .firebase-info h3 i {
-            margin-right: 10px;
-        }
-        
-        .firebase-info ul {
-            padding-left: 20px;
-        }
-        
-        .firebase-info li {
-            margin-bottom: 8px;
-            color: var(--text-secondary);
-        }
-        
-        .loader {
-            border: 3px solid var(--primary-light);
-            border-top: 3px solid var(--accent);
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
-            display: none;
-        }
-        
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 20px;
-            border-radius: 5px;
-            color: white;
-            z-index: 1000;
-            opacity: 0;
-            transform: translateY(-20px);
-            transition: opacity 0.3s, transform 0.3s;
-            max-width: 350px;
-        }
-        
-        .notification.success {
-            background-color: #2ecc71;
-        }
-        
-        .notification.error {
-            background-color: #e74c3c;
-        }
-        
-        .notification.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        @media (max-width: 480px) {
-            .card {
-                padding: 20px;
-            }
-            
-            .card-title {
-                font-size: 1.5rem;
-            }
-            
-            .notification {
-                left: 20px;
-                right: 20px;
-                max-width: none;
-            }
-        }
-    </style>
-    
-    <!-- Firebase App (core Firebase SDK) -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <!-- Firebase Authentication -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-    <!-- Firebase Firestore (for user data) -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login & Registration Form</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #222D32;
+    }
+
+    .container {
+      position: relative;
+      max-width: 430px;
+      width: 100%;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      margin: 0 20px;
+    }
+
+    .container .form {
+      padding: 30px;
+    }
+
+    .container .form .title {
+      position: relative;
+      font-size: 27px;
+      font-weight: 600;
+    }
+
+    .form .title::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      height: 3px;
+      width: 30px;
+      background-color: #222D32;
+      border-radius: 25px;
+    }
+
+    .form .input-field {
+      position: relative;
+      height: 50px;
+      width: 100%;
+      margin-top: 30px;
+    }
+
+    .input-field input {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      padding: 0 35px;
+      border: none;
+      outline: none;
+      font-size: 16px;
+      border-bottom: 2px solid #ccc;
+      border-top: 2px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    .input-field input:is(:focus, :valid) {
+      border-bottom-color: #222D32;
+    }
+
+    .form .checkbox-text {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    .checkbox-text .checkbox-content {
+      display: flex;
+      align-items: center;
+    }
+
+    .checkbox-content input {
+      margin: 0 8px -2px 4px;
+      accent-color: #222D32;
+    }
+
+    .form .text {
+      color: #333;
+      font-size: 14px;
+    }
+
+    .form a.text {
+      color: #222D32;
+      text-decoration: none;
+    }
+
+    .form a:hover {
+      text-decoration: underline;
+    }
+
+    .form .button {
+      margin-top: 35px;
+    }
+
+    .form .button input {
+      border: none;
+      color: #fff;
+      font-size: 17px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      border-radius: 6px;
+      background-color: #222D32;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .button input:hover {
+      background-color: #1a2327;
+    }
+
+    .form .login-signup {
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .message {
+      padding: 15px;
+      margin: 20px;
+      border-radius: 5px;
+      text-align: center;
+      display: none;
+    }
+
+    .message.success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .message.error {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .forgot-password {
+      display: block;
+      margin-top: 10px;
+      text-align: right;
+    }
+
+    .signup {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    header {
+      font-size: 28px;
+      font-weight: 600;
+      color: #222D32;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      height: 50px;
+      width: 100%;
+      padding: 0 15px;
+      font-size: 17px;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      outline: none;
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus {
+      box-shadow: 0 1px 0 rgba(0,0,0,0.2);
+    }
+
+    input.button {
+      height: 50px;
+      padding: 0 15px;
+      font-size: 17px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      outline: none;
+      color: #fff;
+      background: #222D32;
+      cursor: pointer;
+      transition: 0.4s;
+      width: 100%;
+    }
+
+    input.button:hover {
+      background: #1a2327;
+    }
+  </style>
 </head>
 <body>
-    <div id="notification" class="notification"></div>
-    
-    <div class="container">
-        <div class="header">
-            <div class="logo">
-                <i class="fas fa-hands-helping"></i> WelfareConnect
-            </div>
-            <p class="tagline">Member Portal - Firebase Authentication</p>
-        </div>
-        
-        <div class="tabs">
-            <div class="tab active" onclick="showTab('login')">Login</div>
-            <div class="tab" onclick="showTab('signup')">Sign Up</div>
-        </div>
-        
-        <!-- Login Tab -->
-        <div class="tab-content active" id="login-tab">
-            <div class="card">
-                <h2 class="card-title">Login to Your Account</h2>
-                <form id="login-form">
-                    <div class="form-group">
-                        <label for="login-email">Email Address</label>
-                        <input type="email" id="login-email" placeholder="Enter your email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="login-password">Password</label>
-                        <input type="password" id="login-password" placeholder="Enter your password" required>
-                    </div>
-                    <button type="submit" class="btn" id="login-btn">
-                        <span id="login-text">Login</span>
-                        <div class="loader" id="login-loader"></div>
-                    </button>
-                </form>
-                <p style="text-align: center; margin-top: 20px;">
-                    <a href="#" style="color: var(--accent);" onclick="showPasswordReset()">Forgot your password?</a>
-                </p>
-            </div>
-        </div>
-        
-        <!-- Sign Up Tab -->
-        <div class="tab-content" id="signup-tab">
-            <div class="card">
-                <h2 class="card-title">Create Your Account</h2>
-                <form id="signup-form">
-                    <div class="form-group">
-                        <label for="member-id">Welfare Member Number</label>
-                        <input type="text" id="member-id" placeholder="e.g., MS001" required>
-                        <div class="error" id="member-id-error"></div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="first-name">First Name</label>
-                        <input type="text" id="first-name" placeholder="Enter your first name" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="last-name">Last Name</label>
-                        <input type="text" id="last-name" placeholder="Enter your last name" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="email">Email Address</label>
-                        <input type="email" id="email" placeholder="Enter your email" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="phone">Phone Number</label>
-                        <input type="tel" id="phone" placeholder="Enter your phone number" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="password">Create Password</label>
-                        <input type="password" id="password" placeholder="Create a strong password (min. 6 characters)" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="confirm-password">Confirm Password</label>
-                        <input type="password" id="confirm-password" placeholder="Confirm your password" required>
-                        <div class="error" id="password-error"></div>
-                    </div>
-                    
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="terms" required>
-                        <label for="terms">I agree to the Terms and Conditions</label>
-                    </div>
-                    
-                    <button type="submit" class="btn" id="signup-btn">
-                        <span id="signup-text">Create Account</span>
-                        <div class="loader" id="signup-loader"></div>
-                    </button>
-                </form>
-            </div>
-        </div>
-        
-        <div class="firebase-info">
-            <h3><i class="fas fa-info-circle"></i> Firebase Integration Status</h3>
-            <ul>
-                <li id="firebase-status">Firebase: Not initialized</li>
-                <li id="auth-status">Authentication: Not connected</li>
-                <li id="db-status">Firestore: Not connected</li>
-            </ul>
-        </div>
-        
-        <div class="footer">
-            <p>© 2023 WelfareConnect Member Portal. All rights reserved.</p>
-            <p>Powered by <span style="color: var(--accent);">Firebase Authentication</span></p>
-        </div>
+  <div class="container">
+    <div class="login form">
+      <header>Login</header>
+      <form id="loginForm">
+        <input type="text" id='inUsr' placeholder="Enter your email">
+        <input type="password" id="inPass" placeholder="Enter your password">
+        <span class="forgot-password">
+          <a href="#" id="forgotLabel">Forgot password?</a>
+        </span>
+        <input type="submit" class="button loginbtn" value="Login">
+      </form>
+      <div class="signup">
+        <span class="signup">Don't have an account?
+          <a href="#" id="signupLabel">Signup</a>
+        </span>
+      </div>
     </div>
+    
+    <div class="registration form" style="display: none;">
+      <header>Signup</header>
+      <form id="signupForm">
+        <input type="text" id="name" placeholder="Enter your name">
+        <input type="text" id='username' placeholder="Enter your username">
+        <input type="text" id='email' placeholder="Enter your email">
+        <input type="password" id='password' placeholder="Create a password">
+        <input type="submit" class="button signupbtn" value="Signup">
+      </form>
+      <div class="signup">
+        <span class="signup">Already have an account?
+          <a href="#" id="loginLabel">Login</a>
+        </span>
+      </div>
+    </div>
+    
+    <div class="forgot form" style="display: none;">
+      <header>Forgot Password</header>
+      <form id="forgotForm">
+        <input type="text" id='forgotinp' placeholder="Enter your email">
+        <input type="submit" class="button forgotbtn" value="Submit">
+      </form>
+      <div class="signup">
+        <span class="signup">Don't have an account?
+          <a href="#" id="signupLabel2">Signup</a>
+        </span>
+      </div>
+      <div class="signup">
+        <span class="signup">Already have an account?
+          <a href="#" id="loginLabel2">Login</a>
+        </span>
+      </div>
+    </div>
+    
+    <div id="message" class="message"></div>
+  </div>
+  
+  <!-- Firebase App is always required and must be first -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <!-- Add Firebase products that you want to use -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  
+  <script>
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDeT_WqmDMgLNtIEzm-xKiS9kNzGBTpI0c",
+      authDomain: "mt-sinai-welfare.firebaseapp.com",
+      projectId: "mt-sinai-welfare",
+      storageBucket: "mt-sinai-welfare.firebasestorage.app",
+      messagingSenderId: "480570594278",
+      appId: "1:480570594278:web:8ca60b6ba3348eb47e3c27"
+    };
 
-    <script>
-        // ==================== FIREBASE CONFIGURATION ====================
-        // Your Firebase configuration from the console
-        const firebaseConfig = {
-            apiKey: "AIzaSyD4k0ynyNCVoWnL113LREasbkdvszkSiRI",
-            authDomain: "mt-sinai-logins.firebaseapp.com",
-            projectId: "mt-sinai-logins",
-            storageBucket: "mt-sinai-logins.firebasestorage.app",
-            messagingSenderId: "387134591294",
-            appId: "1:387134591294:web:0aab69e4f98147fdb39c6f"
-        };
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const firestore = firebase.firestore();
+
+    // Get DOM elements
+    const signupForm = document.querySelector('.registration.form');
+    const loginForm = document.querySelector('.login.form');
+    const forgotForm = document.querySelector('.forgot.form');
+    const messageDiv = document.getElementById('message');
+
+    // Form switching logic
+    document.querySelectorAll('a').forEach(anchor => {
+      anchor.addEventListener('click', (e) => {
+        e.preventDefault();
+        const id = anchor.id;
         
-        // Initialize Firebase
-        let app;
-        let auth;
-        let db;
-        
-        try {
-            app = firebase.initializeApp(firebaseConfig);
-            auth = firebase.auth();
-            db = firebase.firestore();
-            
-            // Update status
-            document.getElementById('firebase-status').textContent = 'Firebase: Initialized successfully';
-            document.getElementById('auth-status').textContent = 'Authentication: Connected';
-            document.getElementById('db-status').textContent = 'Firestore: Connected';
-            
-            console.log("Firebase initialized successfully");
-        } catch (error) {
-            console.error("Error initializing Firebase:", error);
-            document.getElementById('firebase-status').textContent = 'Firebase: Initialization failed';
-            document.getElementById('firebase-status').style.color = 'var(--error)';
+        switch(id) {
+          case 'loginLabel':
+          case 'loginLabel2':
+            signupForm.style.display = 'none';
+            loginForm.style.display = 'block';
+            forgotForm.style.display = 'none';
+            break;
+          case 'signupLabel':
+          case 'signupLabel2':
+            signupForm.style.display = 'block';
+            loginForm.style.display = 'none';
+            forgotForm.style.display = 'none';
+            break;
+          case 'forgotLabel':
+            signupForm.style.display = 'none';
+            loginForm.style.display = 'none';
+            forgotForm.style.display = 'block';
+            break;
         }
-        
-        // ==================== FIREBASE AUTH STATE OBSERVER ====================
-        if (auth) {
-            auth.onAuthStateChanged(user => {
-                if (user) {
-                    // User is signed in
-                    console.log("User is signed in:", user);
-                    document.getElementById('auth-status').textContent = `Authentication: User signed in (${user.email})`;
-                    
-                    // Check if email is verified
-                    if (user.emailVerified) {
-                        // Redirect to home.html after successful login
-                        window.location.href = "home.html";
-                    } else {
-                        // If email is not verified, show message
-                        showNotification("Please verify your email address to access all features.", "error");
-                    }
-                } else {
-                    // User is signed out
-                    console.log("User is signed out");
-                    document.getElementById('auth-status').textContent = 'Authentication: User signed out';
-                }
+        clearMessage();
+      });
+    });
+
+    // Show message function
+    function showMessage(message, isError = false) {
+      messageDiv.textContent = message;
+      messageDiv.className = isError ? 'message error' : 'message success';
+      messageDiv.style.display = 'block';
+      
+      setTimeout(() => {
+        messageDiv.style.display = 'none';
+      }, 5000);
+    }
+
+    // Clear message
+    function clearMessage() {
+      messageDiv.style.display = 'none';
+    }
+
+    // Sign up functionality
+    document.getElementById('signupForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const name = document.getElementById('name').value;
+      const username = document.getElementById('username').value;
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      
+      if (!name || !username || !email || !password) {
+        showMessage('Please fill all fields', true);
+        return;
+      }
+      
+      auth.createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          
+          // Send email verification
+          return user.sendEmailVerification().then(() => {
+            return firestore.collection('users').doc(user.uid).set({
+              name: name,
+              username: username,
+              email: email,
+              createdAt: firebase.firestore.FieldValue.serverTimestamp()
             });
-        }
-        
-        // ==================== SIGN UP FUNCTION ====================
-        async function signUp(email, password, userData) {
-            if (!auth) {
-                showNotification('Firebase Authentication is not initialized. Please try again later.', 'error');
-                return;
-            }
-            
-            showLoader('signup');
-            
-            try {
-                // Create user with email and password
-                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-                const user = userCredential.user;
-                
-                // Update user profile with additional information
-                await user.updateProfile({
-                    displayName: `${userData.firstName} ${userData.lastName}`
-                });
-                
-                // Save additional user data to Firestore
-                if (db) {
-                    await db.collection("users").doc(user.uid).set({
-                        memberId: userData.memberId,
-                        firstName: userData.firstName,
-                        lastName: userData.lastName,
-                        phone: userData.phone,
-                        email: userData.email,
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                }
-                
-                // Send email verification
-                await user.sendEmailVerification();
-                
-                hideLoader('signup');
-                
-                // Show success message
-                showNotification('Account created successfully! Please check your email for verification.', 'success');
-                
-                // Clear form
-                document.getElementById('signup-form').reset();
-                
-                // Switch to login tab
-                showTab('login');
-                
-            } catch (error) {
-                hideLoader('signup');
-                console.error("Error signing up:", error);
-                showNotification(`Error: ${error.message}`, 'error');
-            }
-        }
-        
-        // ==================== LOGIN FUNCTION ====================
-        async function login(email, password) {
-            if (!auth) {
-                showNotification('Firebase Authentication is not initialized. Please try again later.', 'error');
-                return;
-            }
-            
-            showLoader('login');
-            
-            try {
-                const userCredential = await auth.signInWithEmailAndPassword(email, password);
-                const user = userCredential.user;
-                
-                if (!user.emailVerified) {
-                    showNotification('Please verify your email before logging in. Check your inbox for the verification email.', 'error');
-                    await auth.signOut();
-                    hideLoader('login');
-                    return;
-                }
-                
-                // Successful login - redirect to home.html
-                hideLoader('login');
-                showNotification('Login successful! Redirecting to dashboard...', 'success');
-                
-                // Wait a moment to show the success message, then redirect
-                setTimeout(() => {
-                    window.location.href = "home.html";
-                }, 1500);
-                
-            } catch (error) {
-                hideLoader('login');
-                console.error("Error logging in:", error);
-                showNotification(`Error: ${error.message}`, 'error');
-            }
-        }
-        
-        // ==================== PASSWORD RESET FUNCTION ====================
-        async function resetPassword(email) {
-            if (!auth) {
-                showNotification('Firebase Authentication is not initialized. Please try again later.', 'error');
-                return;
-            }
-            
-            try {
-                await auth.sendPasswordResetEmail(email);
-                showNotification('Password reset email sent! Check your inbox.', 'success');
-            } catch (error) {
-                console.error("Error sending password reset email:", error);
-                showNotification(`Error: ${error.message}`, 'error');
-            }
-        }
-        
-        // ==================== UI FUNCTIONS ====================
-        function showTab(tabName) {
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.remove('active');
-            });
-            
-            document.querySelector(`.tab:nth-child(${tabName === 'login' ? 1 : 2})`).classList.add('active');
-            document.getElementById(`${tabName}-tab`).classList.add('active');
-        }
-        
-        function showPasswordReset() {
-            const email = prompt("Please enter your email address for password reset:");
-            if (email) {
-                resetPassword(email);
-            }
-        }
-        
-        function showLoader(buttonType) {
-            document.getElementById(`${buttonType}-text`).style.display = 'none';
-            document.getElementById(`${buttonType}-loader`).style.display = 'block';
-            document.getElementById(`${buttonType}-btn`).disabled = true;
-        }
-        
-        function hideLoader(buttonType) {
-            document.getElementById(`${buttonType}-text`).style.display = 'block';
-            document.getElementById(`${buttonType}-loader`).style.display = 'none';
-            document.getElementById(`${buttonType}-btn`).disabled = false;
-        }
-        
-        function showNotification(message, type) {
-            const notification = document.getElementById('notification');
-            notification.textContent = message;
-            notification.className = `notification ${type} show`;
-            
-            // Hide notification after 5 seconds
+          });
+        })
+        .then(() => {
+          showMessage('Verification email sent. Please check your inbox and verify your email before signing in.');
+          document.getElementById('signupForm').reset();
+          
+          // Switch to login form
+          signupForm.style.display = 'none';
+          loginForm.style.display = 'block';
+        })
+        .catch((error) => {
+          showMessage('Error: ' + error.message, true);
+        });
+    });
+
+    // Login functionality
+    document.getElementById('loginForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const email = document.getElementById('inUsr').value.trim();
+      const password = document.getElementById('inPass').value;
+      
+      auth.signInWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          
+          if (user.emailVerified) {
+            showMessage('Login successful! Redirecting...');
             setTimeout(() => {
-                notification.classList.remove('show');
-            }, 5000);
-        }
-        
-        // ==================== FORM HANDLING ====================
-        const signupForm = document.getElementById('signup-form');
-        const loginForm = document.getElementById('login-form');
-        
-        signupForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const memberId = document.getElementById('member-id').value;
-            const firstName = document.getElementById('first-name').value;
-            const lastName = document.getElementById('last-name').value;
-            const email = document.getElementById('email').value;
-            const phone = document.getElementById('phone').value;
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirm-password').value;
-            const passwordError = document.getElementById('password-error');
-            const memberIdError = document.getElementById('member-id-error');
-            
-            // Validate member ID format
-            if (!/^MS\d{3}$/.test(memberId)) {
-                memberIdError.textContent = 'Member ID must be in the format MS001';
-                return;
-            } else {
-                memberIdError.textContent = '';
-            }
-            
-            // Validate password match
-            if (password !== confirmPassword) {
-                passwordError.textContent = 'Passwords do not match';
-                return;
-            } else {
-                passwordError.textContent = '';
-            }
-            
-            // Validate password length (Firebase requires at least 6 characters)
-            if (password.length < 6) {
-                passwordError.textContent = 'Password must be at least 6 characters';
-                return;
-            }
-            
-            // If validation passes, call Firebase signup function
-            const userData = {
-                memberId,
-                firstName,
-                lastName,
-                email,
-                phone
-            };
-            
-            signUp(email, password, userData);
+              window.location.href = "signout.html";
+            }, 1500);
+          } else {
+            auth.signOut();
+            showMessage('Please verify your email before signing in.', true);
+          }
+        })
+        .catch((error) => {
+          showMessage('Error: ' + error.message, true);
         });
-        
-        loginForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
-            
-            // Call Firebase login function
-            login(email, password);
+    });
+
+    // Password reset functionality
+    document.getElementById('forgotForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const emailForReset = document.getElementById('forgotinp').value.trim();
+      
+      if (!emailForReset) {
+        showMessage('Please enter your email', true);
+        return;
+      }
+      
+      auth.sendPasswordResetEmail(emailForReset)
+        .then(() => {
+          showMessage('Password reset email sent. Please check your inbox.');
+          document.getElementById('forgotForm').reset();
+          
+          // Switch to login form
+          forgotForm.style.display = 'none';
+          loginForm.style.display = 'block';
+        })
+        .catch((error) => {
+          showMessage('Error: ' + error.message, true);
         });
-        
-        // Member ID format validation
-        document.getElementById('member-id').addEventListener('blur', function() {
-            const memberId = this.value;
-            const errorElement = document.getElementById('member-id-error');
-            
-            if (!/^MS\d{3}$/.test(memberId)) {
-                errorElement.textContent = 'Member ID must be in the format MS001';
-            } else {
-                errorElement.textContent = '';
-            }
-        });
-        
-        // Password confirmation validation
-        document.getElementById('confirm-password').addEventListener('blur', function() {
-            const password = document.getElementById('password').value;
-            const confirmPassword = this.value;
-            const errorElement = document.getElementById('password-error');
-            
-            if (password !== confirmPassword) {
-                errorElement.textContent = 'Passwords do not match';
-            } else {
-                errorElement.textContent = '';
-            }
-        });
-    </script>
+    });
+
+    // Check if user is already logged in
+    auth.onAuthStateChanged((user) => {
+      if (user && user.emailVerified) {
+        window.location.href = "signout.html";
+      }
+    });
+  </script>
 </body>
 </html>

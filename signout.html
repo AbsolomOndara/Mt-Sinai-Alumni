@@ -14,7 +14,7 @@
     <!-- Header & Navigation -->
     <header>
         <div class="nav-container">
-            <div class="logo">
+           <div class="greeting">Hi, <span id="userName">User</span></div> <div class="logo">
                 <span>MT-SINAI ALUMNI</span>
             </div>
             <nav class="nav-links">
@@ -24,7 +24,116 @@
                 <a href="#manifesto" data-section="manifesto">Manifesto</a>
                 <a href="#contact" data-section="contact">Contact</a>
             </nav>
-        </div>
+            <div class="user-info">
+      
+      <button class="signout-btn" id="signoutBtn">
+        <i>🚪</i> Sign Out
+      </button>
+    </div>
+  </nav>
+  <div class="modal" id="signoutModal">
+    <div class="modal-content">
+      <div class="modal-buttons">
+        <button class="modal-btn confirm" id="confirmSignout">Log Out</button>
+        <button class="modal-btn cancel" id="cancelSignout">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Simulating user data - in a real scenario, this would come from your authentication system
+    const userData = {
+      name: "Member",
+      email: "caleb@example.com",
+      joinDate: "January 15, 2023",
+      membership: "Gold Tier"
+    };
+
+    // DOM elements
+    const userNameElement = document.getElementById('userName');
+    const signoutBtn = document.getElementById('signoutBtn');
+    const signoutModal = document.getElementById('signoutModal');
+    const confirmSignout = document.getElementById('confirmSignout');
+    const cancelSignout = document.getElementById('cancelSignout');
+
+    // Set user name
+    userNameElement.textContent = userData.name;
+
+    // Sign out button click handler
+    signoutBtn.addEventListener('click', () => {
+      signoutModal.style.display = 'flex';
+    });
+
+    // Confirm sign out
+    confirmSignout.addEventListener('click', () => {
+      // In a real application, you would call your sign out function here
+      // For demonstration, we'll just show an alert and redirect to login
+      alert('You have been signed out successfully.');
+      window.location.href = 'index.html'; // Redirect to login page
+    });
+
+    // Cancel sign out
+    cancelSignout.addEventListener('click', () => {
+      signoutModal.style.display = 'none';
+    });
+
+    // Close modal if clicked outside
+    window.addEventListener('click', (event) => {
+      if (event.target === signoutModal) {
+        signoutModal.style.display = 'none';
+      }
+    });
+  </script>
+  <script>
+    // Your web app's Firebase configuration (same as in your login page)
+    const firebaseConfig = {
+      apiKey: "AIzaSyDeT_WqmDMgLNtIEzm-xKiS9kNzGBTpI0c",
+      authDomain: "mt-sinai-welfare.firebaseapp.com",
+      projectId: "mt-sinai-welfare",
+      storageBucket: "mt-sinai-welfare.firebasestorage.app",
+      messagingSenderId: "480570594278",
+      appId: "1:480570594278:web:8ca60b6ba3348eb47e3c27"
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const firestore = firebase.firestore();
+
+    // Check authentication state and display user info
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        // User is signed in
+        firestore.collection('users').doc(user.uid).get()
+          .then((doc) => {
+            if (doc.exists) {
+              const userData = doc.data();
+              document.getElementById('userGreeting').textContent = `Hi ${userData.name}`;
+            } else {
+              document.getElementById('userGreeting').textContent = `Hi ${user.email}`;
+            }
+          })
+          .catch((error) => {
+            console.error("Error getting user data:", error);
+            document.getElementById('userGreeting').textContent = `Hi User`;
+          });
+      } else {
+        // No user is signed in, redirect to login page
+        window.location.href = "index.html";
+      }
+    });
+
+    // Sign out function
+    function signOut() {
+      auth.signOut().then(() => {
+        // Sign-out successful, redirect to login page
+        window.location.href = "index.html";
+      }).catch((error) => {
+        console.error("Sign out error:", error);
+      });
+    }
+  </script>
+        
     </header>
 
     <!-- Main Content -->
