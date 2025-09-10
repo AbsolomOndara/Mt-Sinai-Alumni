@@ -34,7 +34,7 @@
             { welfareNo: 'MS032', name: 'EVERYLINE NYANDIEKA', event1: 0, event2: 200, event3: 0, total: 200 },
             { welfareNo: 'MS033', name: 'VERA KERUBO ORINA', event1: 0, event2: 200, event3: 0, total: 200 },
             { welfareNo: 'MS034', name: 'SHARON NYANDIEKA', event1: 0, event2: 200, event3: 0, total: 200 },
-            { welfareNo: 'MS035', name: 'ISALAH OGORA', event1: 0, event2: 200, event3: 0, total: 200 },
+            { welfareNo: 'MS035', name: 'ISIAH OGORA', event1: 0, event2: 200, event3: 0, total: 200 },
             { welfareNo: 'MS036', name: 'KEVIN OPORE', event1: 0, event2: 200, event3: 0, total: 200 },
             { welfareNo: 'MS037', name: 'LYDIA OPORE', event1: 1000, event2: 0, event3: 0, total: 1000 }
         ];
