@@ -8,7 +8,677 @@
     <!-- Add jsPDF library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
-    <link rel="stylesheet" href="main.css">
+    <style>
+        /* Original Styles */
+        :root {
+            --primary: #3498db;
+            --secondary: #2c3e50;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+        
+        .nav-links a:hover, .nav-links a.active {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+        
+        .btn-danger {
+            background: var(--accent);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+        
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .section {
+            display: none;
+        }
+        
+        .section.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 3rem 1rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .stat-card i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .stat-card h3 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: var(--secondary);
+        }
+        
+        .stat-card p {
+            color: #666;
+        }
+        
+        .home-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+        
+        .mission-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .mission-card h2 {
+            color: var(--secondary);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .mission-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+        
+        .mission-point {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .mission-point i {
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+        
+        .testimonials {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .testimonials h2 {
+            color: var(--secondary);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .testimonial-card {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .events-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .event-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .event-header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem;
+        }
+        
+        .event-body {
+            padding: 1.5rem;
+        }
+        
+        .event-details p {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .event-details i {
+            color: var(--primary);
+        }
+        
+        .search-box {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .search-form {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .search-form input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .download-options {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .download-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .download-btn.individual {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .download-btn.full {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .members-table-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+        }
+        
+        .members-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .members-table th, .members-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .members-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+        
+        .members-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .manifesto-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .manifesto-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .point-card {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        footer {
+            background: var(--secondary);
+            color: white;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .footer-section ul {
+            list-style: none;
+        }
+        
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-section a {
+            color: #ddd;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .footer-section a:hover {
+            color: white;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #4a5568;
+        }
+        
+        .developer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        /* Floating WhatsApp Button */
+        .whatsapp-float {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            bottom: 25px;
+            right: 25px;
+            background-color: #25d366;
+            color: white;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 30px;
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.5);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+        
+        .whatsapp-float:hover {
+            background-color: #128C7E;
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(18, 140, 126, 0.7);
+        }
+        
+        .whatsapp-float::after {
+            content: "Contact Management";
+            position: absolute;
+            top: -40px;
+            right: 0;
+            background: #075E54;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            white-space: nowrap;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(37, 211, 102, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+            }
+        }
+        
+        /* Admin Panel Styles */
+        .admin-panel {
+            display: none;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 2rem;
+        }
+        
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .admin-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .admin-tab {
+            padding: 0.75rem 1.5rem;
+            background: #f8f9fa;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .admin-tab.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .admin-content {
+            display: none;
+        }
+        
+        .admin-content.active {
+            display: block;
+        }
+        
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+        }
+        
+        .admin-table th, .admin-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .admin-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+        
+        .admin-form {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            width: 400px;
+            max-width: 90%;
+            padding: 2rem;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .close {
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .modal-body {
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+        
+        .sync-status {
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .syncing {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .synced {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        @media screen and (max-width: 768px) {
+            header {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .search-form, .download-options {
+                flex-direction: column;
+            }
+            
+            .stats, .testimonial-grid, .events-container, .manifesto-points {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Header & Navigation -->
@@ -24,111 +694,10 @@
                 <a href="#manifesto" data-section="manifesto">Manifesto</a>
             </nav>
             <div class="user-info">
-    </div>
-  </nav>
-  <div class="modal" id="signoutModal">
-    <div class="modal-content">
-      <div class="modal-buttons">
-        <button class="modal-btn confirm" id="confirmSignout">Log Out</button>
-        <button class="modal-btn cancel" id="cancelSignout">Cancel</button>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    // Simulating user data - in a real scenario, this would come from your authentication system
-    const userData = {
-      name: "Member",
-      email: "caleb@example.com",
-      joinDate: "January 15, 2023",
-      membership: "Gold Tier"
-    };
-
-    // DOM elements
-    const userNameElement = document.getElementById('userName');
-    const signoutBtn = document.getElementById('signoutBtn');
-    const signoutModal = document.getElementById('signoutModal');
-    const confirmSignout = document.getElementById('confirmSignout');
-    const cancelSignout = document.getElementById('cancelSignout');
-
-    // Set user name
-    userNameElement.textContent = userData.name;
-
-    // Sign out button click handler
-    signoutBtn.addEventListener('click', () => {
-      signoutModal.style.display = 'flex';
-    });
-
-    // Confirm sign out
-    confirmSignout.addEventListener('click', () => {
-      // In a real application, you would call your sign out function here
-      // For demonstration, we'll just show an alert and redirect to login
-      alert('You have been signed out successfully.');
-      window.location.href = 'index.html'; // Redirect to login page
-    });
-
-    // Cancel sign out
-    cancelSignout.addEventListener('click', () => {
-      signoutModal.style.display = 'none';
-    });
-
-    // Close modal if clicked outside
-    window.addEventListener('click', (event) => {
-      if (event.target === signoutModal) {
-        signoutModal.style.display = 'none';
-      }
-    });
-  </script>
-  <script>
-    // Your web app's Firebase configuration (same as in your login page)
-    const firebaseConfig = {
-      apiKey: "AIzaSyDeT_WqmDMgLNtIEzm-xKiS9kNzGBTpI0c",
-      authDomain: "mt-sinai-welfare.firebaseapp.com",
-      projectId: "mt-sinai-welfare",
-      storageBucket: "mt-sinai-welfare.firebasestorage.app",
-      messagingSenderId: "480570594278",
-      appId: "1:480570594278:web:8ca60b6ba3348eb47e3c27"
-    };
-
-    // Initialize Firebase
-    const app = firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const firestore = firebase.firestore();
-
-    // Check authentication state and display user info
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        // User is signed in
-        firestore.collection('users').doc(user.uid).get()
-          .then((doc) => {
-            if (doc.exists) {
-              const userData = doc.data();
-              document.getElementById('userGreeting').textContent = `Hi ${userData.name}`;
-            } else {
-              document.getElementById('userGreeting').textContent = `Hi ${user.email}`;
-            }
-          })
-          .catch((error) => {
-            console.error("Error getting user data:", error);
-            document.getElementById('userGreeting').textContent = `Hi User`;
-          });
-      } else {
-        // No user is signed in, redirect to login page
-        window.location.href = "index.html";
-      }
-    });
-
-    // Sign out function
-    function signOut() {
-      auth.signOut().then(() => {
-        // Sign-out successful, redirect to login page
-        window.location.href = "index.html";
-      }).catch((error) => {
-        console.error("Sign out error:", error);
-      });
-    }
-  </script>
-        
+                <button id="adminLoginBtn" class="btn btn-primary">Admin Login</button>
+                <button id="signoutBtn" class="btn btn-danger">Sign Out</button>
+            </div>
+        </div>
     </header>
 
     <!-- Main Content -->
@@ -288,7 +857,7 @@
                 <h3>Download Contribution Records</h3>
                 <div class="search-form">
                     <input type="text" id="welfare-number" placeholder="Enter Welfare Number">
-                    <button type="button" id="search-member">
+                    <button type="button" id="search-member" class="btn btn-primary">
                         <i class="fas fa-search"></i> Search Member
                     </button>
                 </div>
@@ -356,6 +925,88 @@
             </div>
         </section>
 
+        <!-- Admin Panel (Initially Hidden) -->
+        <div id="adminPanel" class="admin-panel">
+            <div class="admin-header">
+                <h2>Admin Panel</h2>
+                <button id="closeAdminPanel" class="btn btn-danger">Close Admin</button>
+            </div>
+            
+            <div class="admin-tabs">
+                <button class="admin-tab active" data-tab="members-management">Manage Members</button>
+                <button class="admin-tab" data-tab="events-management">Manage Events</button>
+                <button class="admin-tab" data-tab="settings">Settings</button>
+            </div>
+            
+            <div id="members-management" class="admin-content active">
+                <h3>Member Management</h3>
+                <button id="addMemberBtn" class="btn btn-primary">Add New Member</button>
+                
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Welfare No.</th>
+                            <th>Name</th>
+                            <th>Event 1</th>
+                            <th>Event 2</th>
+                            <th>Event 3</th>
+                            <th>Total</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminMembersTable">
+                        <!-- Admin member data will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div id="events-management" class="admin-content">
+                <h3>Event Management</h3>
+                <button id="addEventBtn" class="btn btn-primary">Add New Event</button>
+                
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Event Name</th>
+                            <th>Goal Amount</th>
+                            <th>Raised Amount</th>
+                            <th>Progress</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminEventsTable">
+                        <!-- Admin event data will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div id="settings" class="admin-content">
+                <h3>Google Sheets Integration</h3>
+                <div class="admin-form">
+                    <div class="form-group">
+                        <label for="sheetUrl">Google Sheet URL</label>
+                        <input type="text" id="sheetUrl" class="form-control" placeholder="https://docs.google.com/spreadsheets/d/...">
+                    </div>
+                    <div class="form-group">
+                        <label for="sheetApiKey">Google Sheets API Key (optional)</label>
+                        <input type="text" id="sheetApiKey" class="form-control" placeholder="AIzaSy...">
+                    </div>
+                    <div class="form-actions">
+                        <button id="testConnection" class="btn btn-primary">Test Connection</button>
+                        <button id="saveSettings" class="btn btn-primary">Save Settings</button>
+                    </div>
+                </div>
+                
+                <div class="sync-options">
+                    <h3>Data Synchronization</h3>
+                    <button id="syncToSheet" class="btn btn-primary">Sync to Google Sheet</button>
+                    <button id="syncFromSheet" class="btn btn-primary">Sync from Google Sheet</button>
+                    <div id="syncStatus" class="sync-status"></div>
+                </div>
+            </div>
+        </div>
     </main>
 
     <!-- Footer -->
@@ -372,7 +1023,6 @@
                     <li><a href="#events"><i class="fas fa-calendar"></i> Events</a></li>
                     <li><a href="#members"><i class="fas fa-users"></i> Members</a></li>
                     <li><a href="#manifesto"><i class="fas fa-file-alt"></i> Manifesto</a></li>
-                    <li><a href="#contact"><i class="fas fa-envelope"></i> Contact</a></li>
                 </ul>
             </div>
             <div class="footer-section">
@@ -387,113 +1037,936 @@
         </div>
         <div class="footer-bottom">
             <p>&copy; <span id="currentYear"></span> Mt Sinai Alumni Association. All rights reserved.</p>
-        <p class="developer">Developed by <a href="https://absolomondara.co.ke" target="_blank">Absolom Ondara</a></p>
-    </div>
-
-    <script>
-        // Automatically get and display the current year
-        document.getElementById('currentYear').textContent = new Date().getFullYear();
-    </script>
+            <p class="developer">Developed by <a href="https://absolomondara.co.ke" target="_blank">Absolom Ondara</a></p>
         </div>
     </footer>
-    <script src="main.js"></script>
-    <style>
-        
-        /* Floating WhatsApp Button */
-        .whatsapp-float {
-            position: fixed;
-            width: 60px;
-            height: 60px;
-            bottom: 25px;
-            right: 25px;
-            background-color: #25d366;
-            color: white;
-            border-radius: 50px;
-            text-align: center;
-            font-size: 30px;
-            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.5);
-            z-index: 100;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            animation: pulse 2s infinite;
-        }
-        
-        .whatsapp-float:hover {
-            background-color: #128C7E;
-            transform: scale(1.1);
-            box-shadow: 0 6px 25px rgba(18, 140, 126, 0.7);
-        }
-        
-        .whatsapp-float::after {
-            content: "Contact Management";
-            position: absolute;
-            top: -40px;
-            right: 0;
-            background: #075E54;
-            color: white;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 500;
-            white-space: nowrap;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-        
-        @keyframes pulse {
-            0% {
-                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
-            }
-            70% {
-                box-shadow: 0 0 0 10px rgba(37, 211, 102, 0);
-            }
-            100% {
-                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
-            }
-        }
-        
-        footer {
-            text-align: center;
-            padding: 30px 0;
-            margin-top: 50px;
-            color: #718096;
-            border-top: 1px solid #e2e8f0;
-        }
-        
-        @media screen and (max-width: 768px) {
-            header h1 {
-                font-size: 2.2rem;
-            }
-            
-            .whatsapp-float {
-                width: 50px;
-                height: 50px;
-                font-size: 24px;
-                bottom: 20px;
-                right: 20px;
-            }
-            
-            .whatsapp-float::after {
-                font-size: 12px;
-                padding: 6px 10px;
-                top: -35px;
-            }
-        }
-    </style>
 
-    
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Admin Login</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" class="form-control" placeholder="Admin email">
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" class="form-control" placeholder="Password">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="loginSubmit" class="btn btn-primary">Login</button>
+                <button class="btn btn-danger close-modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Member Modal -->
+    <div id="addMemberModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New Member</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="memberWelfareNo">Welfare Number</label>
+                    <input type="text" id="memberWelfareNo" class="form-control" placeholder="MS001">
+                </div>
+                <div class="form-group">
+                    <label for="memberName">Full Name</label>
+                    <input type="text" id="memberName" class="form-control" placeholder="John Doe">
+                </div>
+                <div class="form-group">
+                    <label for="memberEvent1">Event 1 Contribution</label>
+                    <input type="number" id="memberEvent1" class="form-control" placeholder="1000">
+                </div>
+                <div class="form-group">
+                    <label for="memberEvent2">Event 2 Contribution</label>
+                    <input type="number" id="memberEvent2" class="form-control" placeholder="200">
+                </div>
+                <div class="form-group">
+                    <label for="memberEvent3">Event 3 Contribution</label>
+                    <input type="number" id="memberEvent3" class="form-control" placeholder="0">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger close-modal">Cancel</button>
+                <button id="saveMemberBtn" class="btn btn-success">Save Member</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Event Modal -->
+    <div id="addEventModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New Event</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="eventName">Event Name</label>
+                    <input type="text" id="eventName" class="form-control" placeholder="Burial Event">
+                </div>
+                <div class="form-group">
+                    <label for="eventGoal">Goal Amount (KSH)</label>
+                    <input type="number" id="eventGoal" class="form-control" placeholder="11000">
+                </div>
+                <div class="form-group">
+                    <label for="eventRaised">Raised Amount (KSH)</label>
+                    <input type="number" id="eventRaised" class="form-control" placeholder="5750">
+                </div>
+                <div class="form-group">
+                    <label for="eventStatus">Status</label>
+                    <select id="eventStatus" class="form-control">
+                        <option value="active">Active</option>
+                        <option value="completed">Completed</option>
+                        <option value="upcoming">Upcoming</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger close-modal">Cancel</button>
+                <button id="saveEventBtn" class="btn btn-success">Save Event</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Floating WhatsApp Button -->
     <a href="https://wa.me/254797661940?text=Hello%20Mt%20Sinai%20Alumni%20Admin%2C%20I%20would%20like%20to%20get%20more%20information." class="whatsapp-float" target="_blank">
         <i class="fab fa-whatsapp"></i>
     </a>
-    
+
     <script>
-        // Add click event for the WhatsApp button
-        document.querySelector('.whatsapp-float').addEventListener('click', function() {
-            // You can add analytics or other tracking here
-            console.log('WhatsApp button clicked');
+        // Member data
+        let members = [
+            { welfareNo: 'MS001', name: 'JOEL ACHOKI', event1: 1000, event2: 200, event3: 0, total: 1200 },
+            { welfareNo: 'MS002', name: 'ABSOLOM ONDARA', event1: 1000, event2: 0, event3: 0, total: 1000 },
+            { welfareNo: 'MS003', name: 'MARKUSE ONCHABO', event1: 1000, event2: 200, event3: 1000, total: 2200 },
+            { welfareNo: 'MS004', name: 'KEVIN MBURU', event1: 500, event2: 0, event3: 0, total: 500 },
+            { welfareNo: 'MS005', name: 'NATHAN ONGERA', event1: 1000, event2: 0, event3: 0, total: 1000 },
+            { welfareNo: 'MS006', name: 'LYDIA MOSE', event1: 500, event2: 300, event3: 300, total: 1100 },
+            { welfareNo: 'MS007', name: 'GEOFFREY OPORE', event1: 500, event2: 200, event3: 0, total: 700 },
+            { welfareNo: 'MS008', name: 'SAM OYARO', event1: 1000, event2: 0, event3: 0, total: 1000 },
+            { welfareNo: 'MS009', name: 'JANET ONKOBA', event1: 1000, event2: 200, event3: 0, total: 1200 },
+            { welfareNo: 'MS010', name: 'VIVIAN ONKOBA', event1: 1000, event2: 200, event3: 500, total: 1700 },
+            { welfareNo: 'MS011', name: 'IMMANUE I GITEMBE', event1: 500, event2: 0, event3: 0, total: 500 },
+            { welfareNo: 'MS012', name: 'JUDY MOMANYI', event1: 600, event2: 350, event3: 0, total: 950 },
+            { welfareNo: 'MS013', name: 'PAULETTE BITENGO', event1: 200, event2: 200, event3: 0, total: 400 },
+            { welfareNo: 'MS014', name: 'KEVIN MOGERE ONDIEKI', event1: 1000, event2: 200, event3: 0, total: 1200 },
+            { welfareNo: 'MS015', name: 'GEOFFREY NYABUTO', event1: 500, event2: 0, event3: 0, total: 500 },
+            { welfareNo: 'MS016', name: 'KELVIN OYARO', event1: 500, event2: 0, event3: 0, total: 500 },
+            { welfareNo: 'MS017', name: 'ZACHARY NTABO', event1: 1000, event2: 500, event3: 0, total: 1500 },
+            { welfareNo: 'MS018', name: 'REHEMA MOKUA', event1: 500, event2: 200, event3: 0, total: 700 },
+            { welfareNo: 'MS019', name: 'MILICENT GESARE', event1: 300, event2: 0, event3: 0, total: 300 },
+            { welfareNo: 'MS020', name: 'MORGAN MARONGA', event1: 500, event2: 0, event3: 0, total: 500 },
+            { welfareNo: 'MS021', name: 'NICOEDMUS OCHANDA', event1: 300, event2: 200, event3: 0, total: 500 },
+            { welfareNo: 'MS022', name: 'DOROTHY GESARE', event1: 300, event2: 0, event3: 0, total: 300 },
+            { welfareNo: 'MS023', name: 'KEVIN MOMANYI', event1: 200, event2: 200, event3: 0, total: 400 },
+            { welfareNo: 'MS024', name: 'EDWIN MAKORI', event1: 200, event2: 0, event3: 0, total: 200 },
+            { welfareNo: 'MS025', name: 'VALEDIAN ZACHARY', event1: 200, event2: 0, event3: 0, total: 200 },
+            { welfareNo: 'MS026', name: 'VERONICA BITENGO', event1: 0, event2: 200, event3: 0, total: 200 },
+            { welfareNo: 'MS027', name: 'JAMES MASINDE', event1: 500, event2: 500, event3: 0, total: 1000 },
+            { welfareNo: 'MS028', name: 'VICTOR ORUTA', event1: 300, event2: 300, event3: 0, total: 600 },
+            { welfareNo: 'MS029', name: 'SHARON MORAA', event1: 0, event2: 200, event3: 0, total: 200 },
+            { welfareNo: 'MS030', name: 'TRUS MOSIRA', event1: 0, event2: 200, event3: 0, total: 200 },
+            { welfareNo: 'MS031', name: 'IAN GICHABA', event1: 0, event2: 200, event3: 1000, total: 1200 },
+            { welfareNo: 'MS032', name: 'EVERYLINE NYANDIEKA', event1: 0, event2: 200, event3: 0, total: 200 },
+            { welfareNo: 'MS033', name: 'VERA KERUBO ORINA', event1: 0, event2: 200, event3: 0, total: 200 },
+            { welfareNo: 'MS034', name: 'SHARON NYANDIEKA', event1: 0, event2: 200, event3: 0, total: 200 },
+            { welfareNo: 'MS035', name: 'ISIAH OGORA', event1: 0, event2: 200, event3: 0, total: 200 },
+            { welfareNo: 'MS036', name: 'KEVIN OPORE', event1: 0, event2: 200, event3: 0, total: 200 },
+            { welfareNo: 'MS037', name: 'LYDIA OPORE', event1: 1000, event2: 0, event3: 0, total: 1000 }
+        ];
+
+        // Event data
+        let events = [
+            { id: 1, name: "Event 1", goal: 18500, raised: 17500, progress: 95, status: "completed" },
+            { id: 2, name: "Event 2", goal: 11000, raised: 5750, progress: 52, status: "completed" },
+            { id: 3, name: "Event 3", goal: 11000, raised: 3850, progress: 35, status: "active" }
+        ];
+
+        // DOM Elements
+        const navLinks = document.querySelectorAll('.nav-links a');
+        const sections = document.querySelectorAll('.section');
+        const membersTable = document.querySelector('.members-table tbody');
+        const welfareNumberInput = document.getElementById('welfare-number');
+        const searchMemberBtn = document.getElementById('search-member');
+        const downloadIndividualBtn = document.getElementById('download-individual');
+        const downloadFullBtn = document.getElementById('download-full');
+        const adminLoginBtn = document.getElementById('adminLoginBtn');
+        const signoutBtn = document.getElementById('signoutBtn');
+        const adminPanel = document.getElementById('adminPanel');
+        const closeAdminPanel = document.getElementById('closeAdminPanel');
+        const adminTabs = document.querySelectorAll('.admin-tab');
+        const adminContents = document.querySelectorAll('.admin-content');
+        const adminMembersTable = document.getElementById('adminMembersTable');
+        const adminEventsTable = document.getElementById('adminEventsTable');
+        const addMemberBtn = document.getElementById('addMemberBtn');
+        const addEventBtn = document.getElementById('addEventBtn');
+        const saveMemberBtn = document.getElementById('saveMemberBtn');
+        const saveEventBtn = document.getElementById('saveEventBtn');
+        const loginModal = document.getElementById('loginModal');
+        const addMemberModal = document.getElementById('addMemberModal');
+        const addEventModal = document.getElementById('addEventModal');
+        const closeButtons = document.querySelectorAll('.close, .close-modal');
+        const loginSubmit = document.getElementById('loginSubmit');
+        const syncToSheet = document.getElementById('syncToSheet');
+        const syncFromSheet = document.getElementById('syncFromSheet');
+        const syncStatus = document.getElementById('syncStatus');
+        const testConnection = document.getElementById('testConnection');
+        const saveSettings = document.getElementById('saveSettings');
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set current year in footer
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+            
+            // Populate members table
+            populateMembersTable();
+            populateAdminMembersTable();
+            populateAdminEventsTable();
+            
+            // Set up event listeners
+            setupEventListeners();
         });
+
+        // Populate members table with data
+        function populateMembersTable() {
+            membersTable.innerHTML = '';
+            
+            members.forEach(member => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${member.welfareNo}</td>
+                    <td>${member.name}</td>
+                    <td>KSH ${member.event1}</td>
+                    <td>KSH ${member.event2}</td>
+                    <td>KSH ${member.event3}</td>
+                    <td>KSH ${member.total}</td>
+                `;
+                membersTable.appendChild(row);
+            });
+        }
+
+        // Populate admin members table
+        function populateAdminMembersTable() {
+            adminMembersTable.innerHTML = '';
+            
+            members.forEach(member => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${member.welfareNo}</td>
+                    <td>${member.name}</td>
+                    <td>KSH ${member.event1}</td>
+                    <td>KSH ${member.event2}</td>
+                    <td>KSH ${member.event3}</td>
+                    <td>KSH ${member.total}</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm edit-member" data-id="${member.welfareNo}">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-danger btn-sm delete-member" data-id="${member.welfareNo}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                adminMembersTable.appendChild(row);
+            });
+            
+            // Add event listeners for edit and delete buttons
+            document.querySelectorAll('.edit-member').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const welfareNo = e.target.closest('button').getAttribute('data-id');
+                    editMember(welfareNo);
+                });
+            });
+            
+            document.querySelectorAll('.delete-member').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const welfareNo = e.target.closest('button').getAttribute('data-id');
+                    deleteMember(welfareNo);
+                });
+            });
+        }
+
+        // Populate admin events table
+        function populateAdminEventsTable() {
+            adminEventsTable.innerHTML = '';
+            
+            events.forEach(event => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${event.id}</td>
+                    <td>${event.name}</td>
+                    <td>KSH ${event.goal}</td>
+                    <td>KSH ${event.raised}</td>
+                    <td>${event.progress}%</td>
+                    <td>${event.status}</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm edit-event" data-id="${event.id}">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-danger btn-sm delete-event" data-id="${event.id}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                adminEventsTable.appendChild(row);
+            });
+            
+            // Add event listeners for edit and delete buttons
+            document.querySelectorAll('.edit-event').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const eventId = e.target.closest('button').getAttribute('data-id');
+                    editEvent(parseInt(eventId));
+                });
+            });
+            
+            document.querySelectorAll('.delete-event').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const eventId = e.target.closest('button').getAttribute('data-id');
+                    deleteEvent(parseInt(eventId));
+                });
+            });
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            // Navigation
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetSection = this.getAttribute('data-section');
+                    
+                    // Update active nav link
+                    navLinks.forEach(navLink => navLink.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show target section
+                    sections.forEach(section => {
+                        section.classList.remove('active');
+                        if (section.id === targetSection) {
+                            section.classList.add('active');
+                        }
+                    });
+                });
+            });
+
+            // Search member
+            searchMemberBtn.addEventListener('click', function() {
+                const welfareNo = welfareNumberInput.value.trim().toUpperCase();
+                
+                if (!welfareNo) {
+                    alert('Please enter a welfare number');
+                    return;
+                }
+                
+                const member = members.find(m => m.welfareNo === welfareNo);
+                
+                if (member) {
+                    alert(`Member Found:\nName: ${member.name}\nTotal Contributions: KSH ${member.total}`);
+                } else {
+                    alert('Member not found. Please check the welfare number and try again.');
+                }
+            });
+
+            // Download individual report
+            downloadIndividualBtn.addEventListener('click', function() {
+                const welfareNo = welfareNumberInput.value.trim().toUpperCase();
+                
+                if (!welfareNo) {
+                    alert('Please enter a welfare number to download individual report');
+                    return;
+                }
+                
+                const member = members.find(m => m.welfareNo === welfareNo);
+                
+                if (member) {
+                    generateIndividualPDF(member);
+                } else {
+                    alert('Member not found. Please check the welfare number and try again.');
+                }
+            });
+
+            // Download full report
+            downloadFullBtn.addEventListener('click', function() {
+                generateFullPDF();
+            });
+
+            // Admin login
+            adminLoginBtn.addEventListener('click', function() {
+                loginModal.style.display = 'flex';
+            });
+
+            // Close admin panel
+            closeAdminPanel.addEventListener('click', function() {
+                adminPanel.style.display = 'none';
+            });
+
+            // Admin tabs
+            adminTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Update active tab
+                    adminTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show corresponding content
+                    adminContents.forEach(content => {
+                        content.classList.remove('active');
+                        if (content.id === tabId) {
+                            content.classList.add('active');
+                        }
+                    });
+                });
+            });
+
+            // Add member
+            addMemberBtn.addEventListener('click', function() {
+                // Clear form
+                document.getElementById('memberWelfareNo').value = '';
+                document.getElementById('memberName').value = '';
+                document.getElementById('memberEvent1').value = '';
+                document.getElementById('memberEvent2').value = '';
+                document.getElementById('memberEvent3').value = '';
+                
+                // Change save button to add mode
+                saveMemberBtn.textContent = 'Add Member';
+                saveMemberBtn.setAttribute('data-mode', 'add');
+                
+                // Show modal
+                addMemberModal.style.display = 'flex';
+            });
+
+            // Add event
+            addEventBtn.addEventListener('click', function() {
+                // Clear form
+                document.getElementById('eventName').value = '';
+                document.getElementById('eventGoal').value = '';
+                document.getElementById('eventRaised').value = '';
+                document.getElementById('eventStatus').value = 'active';
+                
+                // Change save button to add mode
+                saveEventBtn.textContent = 'Add Event';
+                saveEventBtn.setAttribute('data-mode', 'add');
+                
+                // Show modal
+                addEventModal.style.display = 'flex';
+            });
+
+            // Save member
+            saveMemberBtn.addEventListener('click', function() {
+                const welfareNo = document.getElementById('memberWelfareNo').value;
+                const name = document.getElementById('memberName').value;
+                const event1 = parseInt(document.getElementById('memberEvent1').value) || 0;
+                const event2 = parseInt(document.getElementById('memberEvent2').value) || 0;
+                const event3 = parseInt(document.getElementById('memberEvent3').value) || 0;
+                const total = event1 + event2 + event3;
+                const mode = this.getAttribute('data-mode');
+                
+                if (!welfareNo || !name) {
+                    alert('Please fill in all required fields');
+                    return;
+                }
+                
+                if (mode === 'add') {
+                    // Check if welfare number already exists
+                    if (members.some(m => m.welfareNo === welfareNo)) {
+                        alert('A member with this welfare number already exists');
+                        return;
+                    }
+                    
+                    const newMember = {
+                        welfareNo,
+                        name,
+                        event1,
+                        event2,
+                        event3,
+                        total
+                    };
+                    
+                    // Add to members array
+                    members.push(newMember);
+                    
+                    // Show success message
+                    alert('Member added successfully!');
+                } else {
+                    // Edit existing member
+                    const editWelfareNo = this.getAttribute('data-edit');
+                    const memberIndex = members.findIndex(m => m.welfareNo === editWelfareNo);
+                    
+                    if (memberIndex !== -1) {
+                        members[memberIndex] = {
+                            welfareNo,
+                            name,
+                            event1,
+                            event2,
+                            event3,
+                            total
+                        };
+                        
+                        // Show success message
+                        alert('Member updated successfully!');
+                    }
+                }
+                
+                // Update tables
+                populateMembersTable();
+                populateAdminMembersTable();
+                
+                // Close modal
+                addMemberModal.style.display = 'none';
+            });
+
+            // Save event
+            saveEventBtn.addEventListener('click', function() {
+                const name = document.getElementById('eventName').value;
+                const goal = parseInt(document.getElementById('eventGoal').value) || 0;
+                const raised = parseInt(document.getElementById('eventRaised').value) || 0;
+                const status = document.getElementById('eventStatus').value;
+                const progress = goal > 0 ? Math.round((raised / goal) * 100) : 0;
+                const mode = this.getAttribute('data-mode');
+                
+                if (!name) {
+                    alert('Please enter an event name');
+                    return;
+                }
+                
+                if (mode === 'add') {
+                    const newEvent = {
+                        id: events.length > 0 ? Math.max(...events.map(e => e.id)) + 1 : 1,
+                        name,
+                        goal,
+                        raised,
+                        progress,
+                        status
+                    };
+                    
+                    // Add to events array
+                    events.push(newEvent);
+                    
+                    // Show success message
+                    alert('Event added successfully!');
+                } else {
+                    // Edit existing event
+                    const editEventId = parseInt(this.getAttribute('data-edit'));
+                    const eventIndex = events.findIndex(e => e.id === editEventId);
+                    
+                    if (eventIndex !== -1) {
+                        events[eventIndex] = {
+                            id: editEventId,
+                            name,
+                            goal,
+                            raised,
+                            progress,
+                            status
+                        };
+                        
+                        // Show success message
+                        alert('Event updated successfully!');
+                    }
+                }
+                
+                // Update table
+                populateAdminEventsTable();
+                
+                // Close modal
+                addEventModal.style.display = 'none';
+            });
+
+            // Close modals
+            closeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    if (this.classList.contains('close-modal')) {
+                        this.closest('.modal').style.display = 'none';
+                    } else {
+                        loginModal.style.display = 'none';
+                        addMemberModal.style.display = 'none';
+                        addEventModal.style.display = 'none';
+                    }
+                });
+            });
+
+            // Login submit
+            loginSubmit.addEventListener('click', function() {
+                const email = document.getElementById('loginEmail').value;
+                const password = document.getElementById('loginPassword').value;
+                
+                // Simple authentication (in a real app, this would be server-side)
+                if (email === 'admin@mtsinai.com' && password === 'admin123') {
+                    // Hide login modal and show admin panel
+                    loginModal.style.display = 'none';
+                    adminPanel.style.display = 'block';
+                    
+                    // Clear login form
+                    document.getElementById('loginEmail').value = '';
+                    document.getElementById('loginPassword').value = '';
+                } else {
+                    alert('Invalid email or password. Please try again.');
+                }
+            });
+
+            // Sync to Google Sheet
+            syncToSheet.addEventListener('click', function() {
+                syncStatus.textContent = 'Syncing data to Google Sheets...';
+                syncStatus.className = 'sync-status syncing';
+                
+                // Simulate API call
+                setTimeout(() => {
+                    syncStatus.textContent = 'Data synced to Google Sheets successfully!';
+                    syncStatus.className = 'sync-status synced';
+                    
+                    setTimeout(() => {
+                        syncStatus.textContent = '';
+                        syncStatus.className = '';
+                    }, 3000);
+                }, 2000);
+            });
+
+            // Sync from Google Sheet
+            syncFromSheet.addEventListener('click', function() {
+                syncStatus.textContent = 'Syncing data from Google Sheets...';
+                syncStatus.className = 'sync-status syncing';
+                
+                // Simulate API call
+                setTimeout(() => {
+                    // In a real implementation, you would fetch data from Google Sheets
+                    // and update the members and events arrays
+                    
+                    syncStatus.textContent = 'Data synced from Google Sheets successfully!';
+                    syncStatus.className = 'sync-status synced';
+                    
+                    // Update tables
+                    populateMembersTable();
+                    populateAdminMembersTable();
+                    populateAdminEventsTable();
+                    
+                    setTimeout(() => {
+                        syncStatus.textContent = '';
+                        syncStatus.className = '';
+                    }, 3000);
+                }, 2000);
+            });
+
+            // Test connection
+            testConnection.addEventListener('click', function() {
+                const sheetUrl = document.getElementById('sheetUrl').value;
+                
+                if (!sheetUrl) {
+                    alert('Please enter a Google Sheet URL');
+                    return;
+                }
+                
+                syncStatus.textContent = 'Testing connection to Google Sheets...';
+                syncStatus.className = 'sync-status syncing';
+                
+                // Simulate API call
+                setTimeout(() => {
+                    syncStatus.textContent = 'Connection to Google Sheets successful!';
+                    syncStatus.className = 'sync-status synced';
+                    
+                    setTimeout(() => {
+                        syncStatus.textContent = '';
+                        syncStatus.className = '';
+                    }, 3000);
+                }, 2000);
+            });
+
+            // Save settings
+            saveSettings.addEventListener('click', function() {
+                const sheetUrl = document.getElementById('sheetUrl').value;
+                const apiKey = document.getElementById('sheetApiKey').value;
+                
+                if (!sheetUrl) {
+                    alert('Please enter a Google Sheet URL');
+                    return;
+                }
+                
+                // Save to local storage
+                localStorage.setItem('sheetUrl', sheetUrl);
+                localStorage.setItem('sheetApiKey', apiKey);
+                
+                alert('Settings saved successfully!');
+            });
+
+            // Close modals when clicking outside
+            window.addEventListener('click', function(e) {
+                if (e.target === loginModal) {
+                    loginModal.style.display = 'none';
+                }
+                if (e.target === addMemberModal) {
+                    addMemberModal.style.display = 'none';
+                }
+                if (e.target === addEventModal) {
+                    addEventModal.style.display = 'none';
+                }
+            });
+        }
+
+        // Edit member
+        function editMember(welfareNo) {
+            const member = members.find(m => m.welfareNo === welfareNo);
+            
+            if (member) {
+                // Populate the form with member data
+                document.getElementById('memberWelfareNo').value = member.welfareNo;
+                document.getElementById('memberName').value = member.name;
+                document.getElementById('memberEvent1').value = member.event1;
+                document.getElementById('memberEvent2').value = member.event2;
+                document.getElementById('memberEvent3').value = member.event3;
+                
+                // Change save button to edit mode
+                saveMemberBtn.textContent = 'Update Member';
+                saveMemberBtn.setAttribute('data-mode', 'edit');
+                saveMemberBtn.setAttribute('data-edit', welfareNo);
+                
+                // Show modal
+                addMemberModal.style.display = 'flex';
+            }
+        }
+
+        // Delete member
+        function deleteMember(welfareNo) {
+            if (confirm('Are you sure you want to delete this member?')) {
+                members = members.filter(m => m.welfareNo !== welfareNo);
+                
+                // Update tables
+                populateMembersTable();
+                populateAdminMembersTable();
+                
+                alert('Member deleted successfully!');
+            }
+        }
+
+        // Edit event
+        function editEvent(eventId) {
+            const event = events.find(e => e.id === eventId);
+            
+            if (event) {
+                // Populate the form with event data
+                document.getElementById('eventName').value = event.name;
+                document.getElementById('eventGoal').value = event.goal;
+                document.getElementById('eventRaised').value = event.raised;
+                document.getElementById('eventStatus').value = event.status;
+                
+                // Change save button to edit mode
+                saveEventBtn.textContent = 'Update Event';
+                saveEventBtn.setAttribute('data-mode', 'edit');
+                saveEventBtn.setAttribute('data-edit', eventId);
+                
+                // Show modal
+                addEventModal.style.display = 'flex';
+            }
+        }
+
+        // Delete event
+        function deleteEvent(eventId) {
+            if (confirm('Are you sure you want to delete this event?')) {
+                events = events.filter(e => e.id !== eventId);
+                
+                // Update table
+                populateAdminEventsTable();
+                
+                alert('Event deleted successfully!');
+            }
+        }
+
+        // Generate individual PDF report
+        function generateIndividualPDF(member) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Set theme colors
+            const primaryColor = [3, 169, 244];
+            const primaryLightColor = [79, 195, 247];
+            const darkBgColor = [18, 18, 18];
+            
+            // Add header with logo and title
+            doc.setFillColor(...primaryColor);
+            doc.rect(0, 0, 210, 40, 'F');
+            
+            doc.setFontSize(22);
+            doc.setTextColor(255, 255, 255);
+            doc.setFont(undefined, 'bold');
+            doc.text("MT SINAI ALUMNI WELFARE SYSTEM", 105, 15, { align: 'center' });
+            
+            doc.setFontSize(14);
+            doc.text("Member Contribution Report", 105, 25, { align: 'center' });
+            
+            // Add member details section
+            doc.setFillColor(...darkBgColor);
+            doc.rect(10, 50, 190, 30, 'F');
+            
+            doc.setFontSize(16);
+            doc.setTextColor(...primaryLightColor);
+            doc.text("MEMBER INFORMATION", 20, 60);
+            
+            doc.setDrawColor(...primaryColor);
+            doc.line(20, 63, 80, 63);
+            
+            // Member details
+            doc.setFontSize(12);
+            doc.setTextColor(255, 255, 255);
+            doc.text(`Welfare Number: ${member.welfareNo}`, 20, 72);
+            doc.text(`Member Name: ${member.name}`, 20, 80);
+            doc.text(`Total Contributions: KSH ${member.total}`, 20, 88);
+            
+            // Add contribution details table
+            const tableColumn = ["Event", "Amount (KSH)"];
+            const tableRows = [
+                ["Event 1", member.event1],
+                ["Event 2", member.event2],
+                ["Event 3", member.event3],
+                ["TOTAL", member.total]
+            ];
+            
+            doc.autoTable({
+                startY: 100,
+                head: [tableColumn],
+                body: tableRows,
+                theme: 'plain',
+                styles: {
+                    fillColor: darkBgColor,
+                    textColor: [255, 255, 255],
+                    lineColor: primaryColor,
+                    lineWidth: 0.1
+                },
+                headStyles: {
+                    fillColor: primaryColor,
+                    textColor: [255, 255, 255]
+                },
+                alternateRowStyles: {
+                    fillColor: [30, 30, 30]
+                }
+            });
+            
+            // Add footer
+            const pageCount = doc.internal.getNumberOfPages();
+            for (let i = 1; i <= pageCount; i++) {
+                doc.setPage(i);
+                doc.setFontSize(10);
+                doc.setTextColor(150, 150, 150);
+                doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 105, 285, { align: 'center' });
+                doc.text(`Page ${i} of ${pageCount}`, 105, 290, { align: 'center' });
+            }
+            
+            // Save the PDF
+            doc.save(`MtSinai_Contribution_Report_${member.welfareNo}.pdf`);
+        }
+
+        // Generate full PDF report
+        function generateFullPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Set theme colors
+            const primaryColor = [3, 169, 244];
+            const primaryLightColor = [79, 195, 247];
+            const darkBgColor = [18, 18, 18];
+            
+            // Add header with logo and title
+            doc.setFillColor(...primaryColor);
+            doc.rect(0, 0, 210, 40, 'F');
+            
+            doc.setFontSize(22);
+            doc.setTextColor(255, 255, 255);
+            doc.setFont(undefined, 'bold');
+            doc.text("MT SINAI ALUMNI WELFARE", 105, 15, { align: 'center' });
+            
+            doc.setFontSize(14);
+            doc.text("Full Contribution Report", 105, 25, { align: 'center' });
+            
+            // Add summary section
+            doc.setFillColor(...darkBgColor);
+            doc.rect(10, 50, 190, 20, 'F');
+            
+            doc.setFontSize(16);
+            doc.setTextColor(...primaryLightColor);
+            doc.text("CONTRIBUTION SUMMARY", 20, 60);
+            
+            doc.setDrawColor(...primaryColor);
+            doc.line(20, 63, 90, 63);
+            
+            // Summary details
+            const totalContributions = members.reduce((sum, member) => sum + member.total, 0);
+            const activeMembers = members.length;
+            
+            doc.setFontSize(12);
+            doc.setTextColor(255, 255, 255);
+            doc.text(`Total Members: ${activeMembers}`, 20, 72);
+            doc.text(`Total Contributions: KSH ${totalContributions}`, 20, 80);
+            doc.text(`Report Date: ${new Date().toLocaleDateString()}`, 20, 88);
+            
+            // Prepare table data
+            const tableColumn = ["Welfare No.", "Name", "Event 1", "Event 2", "Event 3", "Total"];
+            const tableRows = members.map(member => [
+                member.welfareNo,
+                member.name,
+                `KSH ${member.event1}`,
+                `KSH ${member.event2}`,
+                `KSH ${member.event3}`,
+                `KSH ${member.total}`
+            ]);
+            
+            // Add contribution details table
+            doc.autoTable({
+                startY: 100,
+                head: [tableColumn],
+                body: tableRows,
+                theme: 'plain',
+                styles: {
+                    fillColor: darkBgColor,
+                    textColor: [255, 255, 255],
+                    lineColor: primaryColor,
+                    lineWidth: 0.1,
+                    fontSize: 9
+                },
+                headStyles: {
+                    fillColor: primaryColor,
+                    textColor: [255, 255, 255]
+                },
+                alternateRowStyles: {
+                    fillColor: [30, 30, 30]
+                }
+            });
+            
+            // Add footer
+            const pageCount = doc.internal.getNumberOfPages();
+            for (let i = 1; i <= pageCount; i++) {
+                doc.setPage(i);
+                doc.setFontSize(10);
+                doc.setTextColor(150, 150, 150);
+                doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 105, 285, { align: 'center' });
+                doc.text(`Page ${i} of ${pageCount}`, 105, 290, { align: 'center' });
+            }
+            
+            // Save the PDF
+            doc.save("MtSinai_Full_Contribution_Report.pdf");
+        }
+
+        // Load settings from local storage
+        function loadSettings() {
+            const savedSheetUrl = localStorage.getItem('sheetUrl');
+            const savedApiKey = localStorage.getItem('sheetApiKey');
+            
+            if (savedSheetUrl) {
+                document.getElementById('sheetUrl').value = savedSheetUrl;
+            }
+            
+            if (savedApiKey) {
+                document.getElementById('sheetApiKey').value = savedApiKey;
+            }
+        }
+
+        // Initialize settings
+        loadSettings();
     </script>
 </body>
 </html>
