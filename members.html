@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Membership - Mt Sinai Alumni Welfare</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="members.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <h1><i class="fas fa-users"></i> Alumni Membership</h1>
+            <p>Join our thriving community of Mt Sinai Alumni and unlock exclusive benefits, networking opportunities, and lifelong connections.</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Membership Options -->
+            <div class="membership-grid">
+                <div class="membership-card">
+                    <div class="card-icon">
+                        <i class="fas fa-download"></i>
+                    </div>
+                    <h2>Download Contribution Form</h2>
+                    <p>Already a member? Download our membership contribution form to make your annual contribution and maintain your active membership status.</p>
+                    <button class="btn" onclick="openMembershipVerification()">
+                        <i class="fas fa-download"></i>
+                        Download Form
+                    </button>
+                </div>
+
+                <div class="membership-card">
+                    <div class="card-icon">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <h2>Become a Member</h2>
+                    <p>Ready to join our alumni network? Start your membership journey today and connect with fellow Mt Sinai graduates worldwide.</p>
+                    <button class="btn" onclick="openMembershipForm()">
+                        <i class="fas fa-user-plus"></i>
+                        Join Now
+                    </button>
+                </div>
+            </div>
+
+            <!-- Benefits Section -->
+            <section class="benefits-section">
+                <div class="container">
+                    <div class="section-title">
+                        <h2>Membership Benefits</h2>
+                        <p>Discover the exclusive advantages of being part of the Mt Sinai Alumni community</p>
+                    </div>
+                    <div class="benefits-grid">
+                        <div class="benefit-item">
+                            <div class="benefit-icon">
+                                <i class="fas fa-network-wired"></i>
+                            </div>
+                            <h3>Global Network</h3>
+                            <p>Connect with alumni across 50+ countries and expand your professional network worldwide.</p>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-icon">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <h3>Exclusive Events</h3>
+                            <p>Access to alumni gatherings, professional workshops, and networking events throughout the year.</p>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-icon">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                            <h3>Mentorship</h3>
+                            <p>Both mentor and be mentored by fellow alumni in various industries and career stages.</p>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-icon">
+                                <i class="fas fa-briefcase"></i>
+                            </div>
+                            <h3>Career Support</h3>
+                            <p>Access to job boards, career guidance, and professional development resources.</p>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-icon">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <h3>Welfare Support</h3>
+                            <p>Community support system for alumni facing challenges or in need of assistance.</p>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-icon">
+                                <i class="fas fa-newspaper"></i>
+                            </div>
+                            <h3>Alumni Magazine</h3>
+                            <p>Quarterly publications featuring success stories, news, and updates from the community.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Membership Form Modal -->
+    <div id="membershipModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-user-plus"></i> Join Mt Sinai Alumni</h2>
+                <span class="close" onclick="closeMembershipForm()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST" id="membershipForm">
+                    <div class="form-group">
+                        <label for="firstName">First Name *</label>
+                        <input type="text" id="firstName" name="firstName" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="lastName">Last Name *</label>
+                        <input type="text" id="lastName" name="lastName" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email Address *</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">Phone Number *</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="graduationYear">Graduation Year</label>
+                        <input type="number" id="graduationYear" name="graduationYear" min="1950" max="2024">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="profession">Current Profession</label>
+                        <input type="text" id="profession" name="profession">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="location">Current Location (City, Country)</label>
+                        <input type="text" id="location" name="location">
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="consent" name="consent" required>
+                        <label for="consent">
+                            I agree to the terms and conditions of membership and consent to receiving communications from Mt Sinai Alumni Welfare. I understand that my information will be used to facilitate alumni networking and community building activities. *
+                        </label>
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="newsletter" name="newsletter">
+                        <label for="newsletter">
+                            I would like to receive the quarterly alumni newsletter and updates about upcoming events.
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="btn" style="width: 100%; justify-content: center;">
+                        <i class="fas fa-paper-plane"></i>
+                        Submit Application
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Membership Verification Modal -->
+    <div id="verificationModal" class="modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h2><i class="fas fa-shield-alt"></i> Membership Verification</h2>
+                <span class="close" onclick="closeVerificationModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; box-shadow: 0 10px 20px rgba(220, 38, 38, 0.3);">
+                        <i class="fas fa-lock" style="font-size: 2rem; color: white;"></i>
+                    </div>
+                    <h3 style="color: #1e3a8a; margin-bottom: 10px;">Secure Access Required</h3>
+                    <p style="color: #64748b; line-height: 1.6;">Please enter your membership number to access the contribution form. Only verified members can download this document.</p>
+                </div>
+                
+                <form id="verificationForm">
+                    <div class="form-group">
+                        <label for="membershipNumber">Membership Number *</label>
+                        <input type="text" 
+                               id="membershipNumber" 
+                               name="membershipNumber" 
+                               placeholder="Mmembersship Number" 
+                               style="text-transform: uppercase; font-family: 'Courier New', monospace; font-weight: bold; letter-spacing: 1px;"
+                               required>
+                        <div id="formatHint" style="margin-top: 8px; font-size: 0.85rem; color: #6b7280;">
+                            <i class="fas fa-info-circle" style="margin-right: 5px;"></i>
+                            Format: Enter Valid Format
+                        </div>
+                        <div id="errorMessage" style="margin-top: 8px; font-size: 0.85rem; color: #dc2626; display: none;">
+                            <i class="fas fa-exclamation-triangle" style="margin-right: 5px;"></i>
+                            <span id="errorText"></span>
+                        </div>
+                        <div id="successMessage" style="margin-top: 8px; font-size: 0.85rem; color: #059669; display: none;">
+                            <i class="fas fa-check-circle" style="margin-right: 5px;"></i>
+                            Valid membership number format
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 15px; margin-top: 30px;">
+                        <button type="button" class="btn btn-secondary" onclick="closeVerificationModal()" style="flex: 1;">
+                            <i class="fas fa-times"></i>
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn" style="flex: 1;">
+                            <i class="fas fa-unlock"></i>
+                            Verify & Download
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-col">
+                    <h3>Mt Sinai Alumni</h3>
+                    <p>A community of former students supporting each other through life's challenges and celebrations.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="events.html">Events</a></li>
+                        <li><a href="constitution.html">Constitution</a></li>
+                        <li><a href="members.html">Members</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Contact Us</h3>
+                    <p><i class="fas fa-envelope"></i> info@mtsinaialumni.org</p>
+                    <p><i class="fas fa-phone"></i> +254 797 661 940</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Nairobi, Kenya</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+            <p>&copy; <span id="currentYear"></span> Mt Sinai Alumni Association. All rights reserved.</p>
+            <p class="developer">Developed by <a href="https://absolomondara.co.ke" target="_blank">Absolom Ondara</a></p>
+        </div>
+        </div>
+        <!-- Floating WhatsApp Button -->
+    <div class="whatsapp-float" id="whatsappBtn">
+        <svg class="whatsapp-icon" viewBox="0 0 24 24">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.051 3.488"/>
+        </svg>
+    </div>
+
+    <!-- Chat Window -->
+    <div class="chat-window" id="chatWindow">
+        <div class="chat-header">
+            <div class="header-content">
+                <div class="profile-pic">MS</div>
+                <div class="header-text">
+                    <h3>Mt Sinai Alumni Admin</h3>
+                    <p>We are there for you.</p>
+                </div>
+            </div>
+            <button class="close-btn" id="closeBtn">×</button>
+        </div>
+        
+        <div class="chat-body">
+            <div class="message">
+                <p><strong>Contact Admin</strong></p>
+                <p>Hi there!</p>
+                <p>Welcome to Mt Sinai Alumni Admin Support</p>
+                <p>How can we help you?</p>
+                <div class="message-time">Just now</div>
+            </div>
+        </div>
+        
+        <div class="chat-footer">
+            <button class="start-chat-btn" id="startChatBtn">
+                <svg class="whatsapp-icon" viewBox="0 0 24 24" style="width: 20px; height: 20px;">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.051 3.488"/>
+                </svg>
+                Start Chat
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Get elements
+        const whatsappBtn = document.getElementById('whatsappBtn');
+        const chatWindow = document.getElementById('chatWindow');
+        const closeBtn = document.getElementById('closeBtn');
+        const startChatBtn = document.getElementById('startChatBtn');
+
+        // Toggle chat window
+        whatsappBtn.addEventListener('click', function() {
+            chatWindow.classList.toggle('active');
+        });
+
+        // Close chat window
+        closeBtn.addEventListener('click', function() {
+            chatWindow.classList.remove('active');
+        });
+
+        // Start chat functionality
+        startChatBtn.addEventListener('click', function() {
+            // Replace with your WhatsApp number (include country code without +)
+            const phoneNumber = '+254797661940'; // Replace with actual number
+            const message = 'Hi, I need help with Mt Sinai Alumni Admin Support';
+            const whatsappUrl = `https://wa.me/${+254797661940}?text=${encodeURIComponent(message)}`;
+
+            window.open(whatsappUrl, '_blank');
+        });
+
+        // Close chat when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!chatWindow.contains(event.target) && !whatsappBtn.contains(event.target)) {
+                chatWindow.classList.remove('active');
+            }
+        });
+
+        // Prevent chat window from closing when clicking inside it
+        chatWindow.addEventListener('click', function(event) {
+            event.stopPropagation();
+        });
+    </script>
+    
+
+
+
+
+</footer>
+
+    <script>
+        // Modal functionality
+        function openMembershipForm() {
+            document.getElementById('membershipModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMembershipForm() {
+            document.getElementById('membershipModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Verification modal functionality
+        function openMembershipVerification() {
+            document.getElementById('verificationModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            // Clear previous input and messages
+            document.getElementById('membershipNumber').value = '';
+            hideMessages();
+        }
+
+        function closeVerificationModal() {
+            document.getElementById('verificationModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function hideMessages() {
+            document.getElementById('errorMessage').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'none';
+        }
+
+        function showError(message) {
+            hideMessages();
+            document.getElementById('errorText').textContent = message;
+            document.getElementById('errorMessage').style.display = 'block';
+        }
+
+        function showSuccess() {
+            hideMessages();
+            document.getElementById('successMessage').style.display = 'block';
+        }
+
+        // Membership number validation
+        function validateMembershipNumber(membershipNumber) {
+            // Remove any spaces and convert to uppercase
+            const cleanNumber = membershipNumber.trim().toUpperCase();
+            
+            // Check if it starts with MSAN and has at least one number after it
+            const pattern = /^MSAN\d+$/;
+            
+            return {
+                isValid: pattern.test(cleanNumber),
+                cleanNumber: cleanNumber
+            };
+        }
+
+        // Real-time validation as user types
+        document.addEventListener('DOMContentLoaded', function() {
+            const membershipInput = document.getElementById('membershipNumber');
+            
+            membershipInput.addEventListener('input', function(e) {
+                const value = e.target.value.trim().toUpperCase();
+                e.target.value = value; // Update the field with uppercase
+                
+                if (value.length > 0) {
+                    const validation = validateMembershipNumber(value);
+                    
+                    if (validation.isValid) {
+                        showSuccess();
+                        e.target.style.borderColor = '#059669';
+                        e.target.style.background = '#f0fdf4';
+                    } else {
+                        if (value.length < 5) {
+                            showError('Membership number is too short');
+                        } else if (!value.startsWith('MSAN')) {
+                            showError('Membership number must start with "MSAN"');
+                        } else {
+                            showError('Invalid format. Use MSAN followed by numbers only');
+                        }
+                        e.target.style.borderColor = '#dc2626';
+                        e.target.style.background = '#fef2f2';
+                    }
+                } else {
+                    hideMessages();
+                    e.target.style.borderColor = '#e5e7eb';
+                    e.target.style.background = '#f9fafb';
+                }
+            });
+        });
+
+        // Verification form submission
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('verificationForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const membershipNumber = document.getElementById('membershipNumber').value.trim();
+                const validation = validateMembershipNumber(membershipNumber);
+                
+                if (!validation.isValid) {
+                    if (membershipNumber.length === 0) {
+                        showError('Please enter your membership number');
+                    } else if (membershipNumber.length < 5) {
+                        showError('Membership number is too short');
+                    } else if (!membershipNumber.toUpperCase().startsWith('MSAN')) {
+                        showError('Membership number must start with "MSAN"');
+                    } else {
+                        showError('Invalid format. Use MSAN followed by numbers only (e.g., MSAN01)');
+                    }
+                    return;
+                }
+
+                // Show loading state
+                const submitBtn = this.querySelector('button[type="submit"]');
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verifying...';
+                submitBtn.disabled = true;
+
+                // Simulate verification process (you can add actual backend verification here)
+                setTimeout(() => {
+                    // Reset button
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                    
+                    // Close modal
+                    closeVerificationModal();
+                    
+                    // Show success message and open Google Sheets
+                    const successModal = document.createElement('div');
+                    successModal.innerHTML = `
+                        <div style="position: fixed; top: 20px; right: 20px; background: linear-gradient(135deg, #059669 0%, #10b981 100%); color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 10px 25px rgba(5, 150, 105, 0.3); z-index: 10000; animation: slideInRight 0.3s ease-out;">
+                            <i class="fas fa-check-circle" style="margin-right: 10px;"></i>
+                            Membership verified! Opening contribution form...
+                        </div>
+                    `;
+                    document.body.appendChild(successModal);
+                    
+                    // Remove success message after 3 seconds
+                    setTimeout(() => {
+                        successModal.remove();
+                    }, 3000);
+                    
+                    // Open Google Sheets (replace with your actual sheet URL)
+                    window.open('https://docs.google.com/spreadsheets/d/1sZT3uIwbxJ0AzSBZfva5EBHvPWkECxi3baOdgOyr4AI/edit?usp=sharing', '_blank');
+                    
+                }, 1500); // 1.5 second delay to simulate verification
+            });
+        });
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const membershipModal = document.getElementById('membershipModal');
+            const verificationModal = document.getElementById('verificationModal');
+            
+            if (event.target === membershipModal) {
+                closeMembershipForm();
+            }
+            if (event.target === verificationModal) {
+                closeVerificationModal();
+            }
+        }
+
+        // Close modal with escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeMembershipForm();
+                closeVerificationModal();
+            }
+        });
+
+        // Form submission handling
+        document.getElementById('membershipForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Show loading state
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+            submitBtn.disabled = true;
+
+            // Submit to Formspree
+            fetch(this.action, {
+                method: 'POST',
+                body: new FormData(this),
+                headers: {
+                    'Accept': 'application/json'
+                }
+            }).then(response => {
+                if (response.ok) {
+                    alert('Thank you for your membership application! We will contact you soon.');
+                    this.reset();
+                    closeMembershipForm();
+                } else {
+                    throw new Error('Network response was not ok');
+                }
+            }).catch(error => {
+                alert('There was a problem submitting your application. Please try again.');
+            }).finally(() => {
+                // Reset button
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            });
+        });
+
+        // Add slide-in animation for success notification
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from {
+                    opacity: 0;
+                    transform: translateX(300px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Apply animation to elements
+        document.addEventListener('DOMContentLoaded', function() {
+            const animateElements = document.querySelectorAll('.membership-card, .benefit-item, .stat-item');
+            animateElements.forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>
